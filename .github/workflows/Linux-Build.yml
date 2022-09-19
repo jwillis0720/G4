@@ -18,6 +18,5 @@ jobs:
         with:
           python-version: 3.10.6
       - run: |
-          pip install -e .
           pip install -e .[dev]
       - run: pytest tests/unit/
