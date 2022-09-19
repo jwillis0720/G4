@@ -3,11 +3,11 @@
 name: Linux Build and Test
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
     tags:
       - "*"
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   build-test:
@@ -26,7 +26,6 @@ jobs:
       - name: Install w/dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -e .[dev]
       - name : Cache PIP
         uses: actions/cache@v2
         with:
@@ -34,14 +33,7 @@ jobs:
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
-      - name: PreCommit
-        uses: pre-commit/action@v2.0.0
       - name: Test
         run: |
           env
           pytest -x --cov={package} --cov-report=xml --cov-report=term tests/unit
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1.0.15
-      - name: Integration Testing
-        run: |
-          pytest -v tests/integration --disable-warnings
