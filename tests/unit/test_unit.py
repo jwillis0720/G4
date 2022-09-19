@@ -1,8 +1,5 @@
 """Unit tests for analysis interface."""
-import glob
 import logging
-import os
-import tempfile
 
 import pytest
 from click.testing import CliRunner
@@ -10,5 +7,7 @@ from click.testing import CliRunner
 logger = logging.getLogger()
 
 
-def test_cli():
-    pass
+def test_cli() -> None:
+    cli_runner = CliRunner()
+    result = cli_runner.invoke("g4", "run")
+    assert result.exit_code == 0
