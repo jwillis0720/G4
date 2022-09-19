@@ -1,39 +1,22 @@
 # This workflow will install Python dependencies, run tests and lint with a variety of Python versions
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
-name: Linux Build and Test
+name: Linux-Build-and-Run
 on:
   push:
-    branches: [ main ]
-    tags:
-      - "*"
+    branches: [ 'main' ]
   pull_request:
-    branches: [ main ]
+    branches: [ 'main', 'development']
 
 jobs:
-  build-test:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        python-version: [3.10]
+  Linux-Build-and-Run:
+    runs-on: ubuntu-latest
     steps:
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v3
         with:
-            python-version: ${{ matrix.python-version }}
-      - name: Checkout Code
-        uses: actions/checkout@v2
-      - name: Install w/dependencies
-        run: |
-          python -m pip install --upgrade pip
-      - name : Cache PIP
-        uses: actions/cache@v2
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-      - name: Test
-        run: |
-          env
-          pytest -x --cov={package} --cov-report=xml --cov-report=term tests/unit
+          python-version: 3.10
+      - run: |
+          pip install -e .[dev]
+      - run: pytest tests/unit/
