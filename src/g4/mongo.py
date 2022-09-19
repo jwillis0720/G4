@@ -1,6 +1,6 @@
 from pymongo import MongoClient
 from pathlib import Path
-from typing import List
+from typing import Any, List
 import logging
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
@@ -57,10 +57,10 @@ class Mongo:
         self._auth_path = path
 
     @property
-    def client(self) -> MongoClient:
+    def client(self) -> MongoClient[Any]:
         return self._client
 
-    def get_client(self) -> MongoClient:
+    def get_client(self) -> MongoClient[Any]:
         return self.client
 
     def get_database_names(self) -> List[str]:

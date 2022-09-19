@@ -1,13 +1,14 @@
 """Unit tests for analysis interface."""
 import logging
 
-import pytest
-from click.testing import CliRunner
+from fastapi.testclient import TestClient
+from g4.main import app
 
 logger = logging.getLogger()
 
+client = TestClient(app)
 
 def test_cli() -> None:
-    cli_runner = CliRunner()
-    result = cli_runner.invoke("g4", "run")
-    assert result.exit_code == 0
+    response = client.get("/")
+    assert response.status_code == 200
+    assert response.json() == {"message": "G3 is working"}

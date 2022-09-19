@@ -4,6 +4,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import PlainTextResponse
 
 from g4.mongo import Mongo
+from g4.config import settings
 # from .routers import router as g3_router
 # from .config import settings
 
@@ -16,19 +17,19 @@ app = FastAPI(
 )
 
 
-@app.on_event("startup")
+@app.on_event("startup") # type: ignore
 async def startup_db_client() -> None:
-    app.mongodb_client = Mongo()
-    app.mongodb = app.mongodb_client.get_client()[settings.DB_NAME]
+    app.state.db = Mongo()
+    app.state.collection = app.state.db.get_client()[settings.DB_NAME]
 
 
-# @app.on_event("shutdown")
-# async def shutdown_db_client():
-#     app.mongodb_client.get_client().close()
+@app.on_event("shutdown") # type: ignore
+async def shutdown_db_client()-> None:
+    app.state.db.get_client().close()
 
 
 @app.get("/")
-async def root():
+async def root()-> dict[str,str]:
     return {"message": "G3 is working"}
 
 
