@@ -8,7 +8,8 @@ logger = logging.getLogger()
 
 client = TestClient(app)
 
-def test_cli() -> None:
+
+def test_root_response() -> None:
     response = client.get("/")
     assert response.status_code == 200
-    assert response.json() == {"message": "G3 is working"}
+    assert response.json() == {"message": "G4 is working"}
