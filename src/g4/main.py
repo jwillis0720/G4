@@ -27,7 +27,6 @@ async def startup_db_client() -> None:
     app.state.mongo = Mongo(use_async=True, settings=settings)
     app.state.client = app.state.mongo.get_client()
     app.state.database = app.state.mongo.get_database()
-    app.state.collection = app.state.mongo.get_collection()
 
 
 @app.on_event("shutdown")  # type: ignore

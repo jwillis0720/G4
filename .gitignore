@@ -34,3 +34,4 @@ upload_cov.sh
 local_gene_reference/*
 notebooks/*
 htmlcov*
+.env

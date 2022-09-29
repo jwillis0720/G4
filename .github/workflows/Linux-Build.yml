@@ -19,4 +19,5 @@ jobs:
           python-version: 3.10.6
       - run: |
           pip install -e .[dev]
-      - run: pytest tests/unit/
+          pip install coverage
+      - run: coverage run --source=g4 -xs tests/unit; coverage xml
