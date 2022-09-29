@@ -20,4 +20,4 @@ jobs:
       - run: |
           pip install -e .[dev]
           pip install coverage
-      - run: coverage run --source=g4 -xs tests/unit; coverage xml
+      - run: coverage run --source=g4 -m pytest -xs tests/unit; coverage xml
