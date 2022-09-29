@@ -56,7 +56,10 @@ class Mongo:
         # in production use, env vars to get client
         else:
             if not "MONGOUSER" in os.environ and not "MONGOPASSWORD" in os.environ:
+                logger.info("Loading environment variables form .env")
                 self.load_env()
+            else:
+                logger.info("Using environment variables")
             self.mongo_uri = f"mongodb+srv://{os.environ['MONGOUSER']}:{os.environ['MONGOPASSWORD']}@{self.mongo_host}/{self.mongo_database_name}?retryWrites=true&w=majority"
             if self.use_async:
                 self.client = AsyncIOMotorClient(self.mongo_uri)
