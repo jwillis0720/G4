@@ -5,7 +5,7 @@ from g4.config import Settings
 from pymongo.database import Database
 import pytest
 import asyncio
-
+from pathlib import Path
 
 async def get_motor_server_info(client: MongoClient[dict[str, Any]]) -> dict[str, Any]:
     return await client.server_info()
@@ -35,21 +35,11 @@ def test_mongo_client():
 
     # get imgt collection
     collection = mongo_sync.get_collection("imgt")
-    collection_name = collection.name
-    assert database.validate_collection(collection_name)
     assert collection.find_one()["source"] == "imgt"
 
     # get custom collection
     collection = mongo_sync.get_collection("custom")
-    collection_name = collection.name
-    assert database.validate_collection(collection_name)
     assert collection.find_one()["source"] == "custom"
-
-    # test env password - these will come from .env file
-    mongo_sync = Mongo(settings, use_async=False, key_path="a/non_existent/path")
-
-    # can still use async client with api keys
-    Mongo(settings, use_async=True, key_path="a/non_existent/path")
 
 
 def test_authentication_errors(monkeypatch):
@@ -58,9 +48,9 @@ def test_authentication_errors(monkeypatch):
     monkeypatch.setenv("MONGOPASSWORD", "test")
     settings = Settings()
     with pytest.raises(AuthenticationError):
-        Mongo(settings, use_async=False, key_path="a/non_existent/path")
+        Mongo(settings, use_async=False)
 
     monkeypatch.delenv("MONGOUSER")
     monkeypatch.delenv("MONGOPASSWORD")
     with pytest.raises(AuthenticationError):
-        Mongo(settings, use_async=False, key_path="a/non_existent/path")
+        Mongo(settings, use_async=False, dot_env_path=Path("tests/unit/.env"))
