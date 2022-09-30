@@ -22,6 +22,6 @@ jobs:
           pip install coverage
       - name: Run Tests
         env:
-          MONGOUSER: ${{ secrets.PYPI_USERNAME }}
-          MONGOPASSWORD: ${{ secrets.PYPI_PASSWORD }}
-        run: coverage run --source=g4 -m pytest -xs tests/unit; coverage xml
+          MONGOUSER: ${{ secrets.MONGOUSER }}
+          MONGOPASSWORD: ${{ secrets.MONGOPASSWORD }}
+        run: coverage run --source=g4 -m pytest -xs --log-cli-level=DEBUG tests/; coverage xml
